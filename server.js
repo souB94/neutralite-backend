@@ -11,6 +11,7 @@ import FilterRoutes from './routes/filterRoutes.js'; // Import best seller route
 import ShopCategoryRoutes from './routes/shopCategoryRoutes.js'; // Import shop category routes
 import orderRoutes from './routes/OrderRoutes.js'; // <-- NEW: Import order routes
 import blogRoutes from './routes/blogRoutes.js'; // Import blog routes
+import commentRoutes from './routes/commentRoutes.js'; // Import comment routes
 
 // Load environment variables from .env file
 dotenv.config();
@@ -57,6 +58,7 @@ app.use('/api/filters', FilterRoutes);
 app.use('/api/shopCategories', ShopCategoryRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/blogs', blogRoutes);
+app.use('/api/comments', commentRoutes); // Add comment routes
 
 // Connect to the database
 connectDB();
@@ -75,6 +77,7 @@ app.listen(PORT, () => {
   console.log(`Shop Categories API: http://localhost:${PORT}/api/shopCategories`);
   console.log(`Orders API: http://localhost:${PORT}/api/orders`);
   console.log(`Blogs API: http://localhost:${PORT}/api/blogs`);
+  console.log(`Comments API: http://localhost:${PORT}/api/comments`);
   console.log(`Example: Single Product by ID: http://localhost:${PORT}/api/products/YOUR_PRODUCT_MONGODB_ID`);
 });
 
