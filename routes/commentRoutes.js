@@ -5,9 +5,9 @@ import Comment from '../models/Comments.js'; // You now need to import the Comme
 const router = express.Router();
 
 // @desc    Create a new comment
-// @route   POST /api/comments
+// @route   POST /api/comments/add
 // @access  Public
-router.post('/', async (req, res) => {
+router.post('/add', async (req, res) => {
     const { blogId, name, email, message } = req.body;
 
     // Basic validation
