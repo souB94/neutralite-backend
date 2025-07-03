@@ -56,6 +56,7 @@ app.listen(PORT, () => {
 
 // --- CORS Configuration ---
 // This is crucial for your frontend to communicate with the backend.
+
 const allowedOrigins = process.env.NODE_ENV === 'production'
     ? process.env.CORS_ORIGIN // This will be your Netlify URL
     : ['http://localhost:3000', 'http://localhost:5173']; // Add your frontend's local dev URLs
