@@ -54,7 +54,8 @@ app.listen(PORT, () => {
   console.log(`Example: Single Product by ID: http://localhost:${PORT}/api/products/YOUR_PRODUCT_MONGODB_ID`);
 });
 
-const cors = require('cors');
+// --- CORS Configuration ---
+// This is crucial for your frontend to communicate with the backend.
 
 const allowedOrigins = process.env.NODE_ENV === 'production'
     ? process.env.CORS_ORIGIN // This will be your Netlify URL
