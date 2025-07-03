@@ -53,6 +53,32 @@ app.listen(PORT, () => {
   console.log(`Blogs API: http://localhost:${PORT}/api/blogs`); // <-- NEW: Log this endpoint
   console.log(`Example: Single Product by ID: http://localhost:${PORT}/api/products/YOUR_PRODUCT_MONGODB_ID`);
 });
+
+const cors = require('cors');
+
+const allowedOrigins = process.env.NODE_ENV === 'production'
+    ? process.env.CORS_ORIGIN // This will be your Netlify URL
+    : ['http://localhost:3000', 'http://localhost:5173']; // Add your frontend's local dev URLs
+
+app.use(cors({
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps, Postman/Insomnia, curl requests)
+        if (!origin) return callback(null, true);
+        // Allow specific origins
+        if (Array.isArray(allowedOrigins)) {
+            if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+        } else if (origin === allowedOrigins) {
+            return callback(null, true);
+        }
+        // Block all other origins
+        var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+        return callback(new Error(msg), false);
+    }
+}));
+
+
 // Note: Make sure to run `npm install express cors dotenv` to install the required packages.
 // Also, ensure you have a .env file in your project root with any necessary environment variables.
 
