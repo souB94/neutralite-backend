@@ -24,7 +24,7 @@ app.use(express.json());
 // This must come BEFORE your route definitions.
 const allowedOrigins = process.env.NODE_ENV === 'production'
     ? process.env.CORS_ORIGIN // This will be your Netlify URL
-    : ['http://localhost:3000', 'http://localhost:5173']; // Add your frontend's local dev URLs
+    : ['http://localhost:5000', 'http://localhost:5173']; // Add your frontend's local dev URLs
 
 app.use(cors({
     origin: function (origin, callback) {
