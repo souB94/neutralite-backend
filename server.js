@@ -10,7 +10,7 @@ import BestSellerRoutes from './routes/BestSellerRoutes.js'; // Import best sell
 import FilterRoutes from './routes/filterRoutes.js'; // Import best seller routes
 import ShopCategoryRoutes from './routes/shopCategoryRoutes.js'; // Import shop category routes
 import orderRoutes from './routes/OrderRoutes.js'; // <-- NEW: Import order routes
-import blogRoutes from './routes/BlogRoutes.js'; // Import blog routes
+import blogRoutes from './routes/blogRoutes.js'; // Import blog routes
 
 // Load environment variables from .env file
 dotenv.config();
