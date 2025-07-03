@@ -17,46 +17,11 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
-// Enable CORS for all origins. This is crucial for your frontend to communicate with the backend.
-app.use(cors());
-// Enable Express to parse JSON request bodies
+// Middleware to parse JSON request bodies
 app.use(express.json());
 
-app.use('/uploads', express.static('uploads')); // <-- ADD THIS LINE
-
-app.use('/api/products', productRoutes); // Make sure this line is present and correct
-app.use('/api/banners', bannerRoutes); // Make sure this line is present and correct
-app.use('/api/personalProducts', personalProductRoute); // Make sure this line is present and correct
-app.use('/api/bestSellers', BestSellerRoutes); // Make sure this line is present and correct
-app.use('/api/filters', FilterRoutes); // Make sure this line is present and correct
-app.use('/api/shopCategories', ShopCategoryRoutes); // Make sure this line is present and correct
-app.use('/api/orders', orderRoutes); // <-- NEW: Mount order routes
-app.use('/api/blogs', blogRoutes); // <-- NEW: Mount blog routes
-
-// This line mounts the product routes at the /api/products endpoint
-// Ensure that your productRoutes.js file exports the router correctly
-// Define the port for your server
-const PORT = process.env.PORT || 5000;
-connectDB(); // Connect to the database
-
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  // Log all the main API endpoints for easy testing
-  console.log(`General Products API: http://localhost:${PORT}/api/products`);
-  console.log(`Personal Care Products API: http://localhost:${PORT}/api/personalProducts`);
-  console.log(`Banners API: http://localhost:${PORT}/api/banners`);
-  console.log(`Dynamic Filters API: http://localhost:${PORT}/api/filters`); // <-- NEW: Log this important endpoint
-  console.log(`Shop Categories API: http://localhost:${PORT}/api/shopCategories`); // <-- NEW: Log this important endpoint
-  console.log(`Orders API: http://localhost:${PORT}/api/orders`); // <-- NEW: Log this endpoint
-  console.log(`Blogs API: http://localhost:${PORT}/api/blogs`); // <-- NEW: Log this endpoint
-  console.log(`Example: Single Product by ID: http://localhost:${PORT}/api/products/YOUR_PRODUCT_MONGODB_ID`);
-});
-
 // --- CORS Configuration ---
-// This is crucial for your frontend to communicate with the backend.
-
+// This must come BEFORE your route definitions.
 const allowedOrigins = process.env.NODE_ENV === 'production'
     ? process.env.CORS_ORIGIN // This will be your Netlify URL
     : ['http://localhost:3000', 'http://localhost:5173']; // Add your frontend's local dev URLs
@@ -80,47 +45,38 @@ app.use(cors({
 }));
 
 
-// Note: Make sure to run `npm install express cors dotenv` to install the required packages.
-// Also, ensure you have a .env file in your project root with any necessary environment variables.
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static('uploads'));
 
-// --- Basic API Route for Testing (Optional but Recommended) ---
-// This is a simple route to confirm your backend is working.
-/*app.get('/api/products', (req, res) => {
-  res.status(200).json({ message: 'Hello from the backend API!' });
+// API Routes
+app.use('/api/products', productRoutes);
+app.use('/api/banners', bannerRoutes);
+app.use('/api/personalProducts', personalProductRoute);
+app.use('/api/bestSellers', BestSellerRoutes);
+app.use('/api/filters', FilterRoutes);
+app.use('/api/shopCategories', ShopCategoryRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/blogs', blogRoutes);
+
+// Connect to the database
+connectDB();
+
+// Define the port for your server
+const PORT = process.env.PORT || 5000;
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+  // Log all the main API endpoints for easy testing (use actual host/URL for deployed)
+  console.log(`General Products API: http://localhost:${PORT}/api/products`);
+  console.log(`Personal Care Products API: http://localhost:${PORT}/api/personalProducts`);
+  console.log(`Banners API: http://localhost:${PORT}/api/banners`);
+  console.log(`Dynamic Filters API: http://localhost:${PORT}/api/filters`);
+  console.log(`Shop Categories API: http://localhost:${PORT}/api/shopCategories`);
+  console.log(`Orders API: http://localhost:${PORT}/api/orders`);
+  console.log(`Blogs API: http://localhost:${PORT}/api/blogs`);
+  console.log(`Example: Single Product by ID: http://localhost:${PORT}/api/products/YOUR_PRODUCT_MONGODB_ID`);
 });
 
-app.get('/api/banners', (req, res) => {
-  res.status(201).json({ message: 'Hello from the backend API!' });
-});
-
-app.get('/api/personalProducts', (req, res) => {
-  res.status(201).json({ message: 'Hello from the backend API!' });
-});
-
-app.get('/api/bestSellers', (req, res) => {
-  res.status(201).json({ message: 'Hello from the backend API!' });
-});
-
-app.get('/api/filters', (req, res) => {
-  res.status(201).json({ message: 'Hello from the backend API!' });
-});*/
-
-// --- Serve Static React Build Files (Future Step for Deployment) ---
-// IMPORTANT: You'll build your React app (npm run build) and then point this
-// to the build folder. For local development, your React dev server
-// will handle serving the frontend, so this part isn't active yet.
-// However, it's good to include it for when you deploy.
-
-// Example if your React build output is in a 'build' folder inside your backend project:
-// import path from 'path';
-// import { fileURLToPath } from 'url';
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-// app.use(express.static(path.join(__dirname, 'build'))); // Replace 'build' with your React build folder name
-
-// app.get('*', (req, res) => {
-//   res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
-// });
-
-
-
+// REMOVED the redundant and misplaced `app.use(cors());` and the commented out basic API routes.
+// REMOVED the static React build files section as it's for a different deployment scenario.
