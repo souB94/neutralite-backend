@@ -10,7 +10,7 @@ import BestSellerRoutes from './routes/BestSellerRoutes.js'; // Import best sell
 import FilterRoutes from './routes/filterRoutes.js'; // Import best seller routes
 import ShopCategoryRoutes from './routes/shopCategoryRoutes.js'; // Import shop category routes
 import orderRoutes from './routes/OrderRoutes.js'; // <-- NEW: Import order routes
-import blogRoutes from './routes/blogRoutes.js'; // Import blog routes
+import blogRoutes from './routes/BlogRoutes.js'; // Import blog routes
 
 // Load environment variables from .env file
 dotenv.config();
@@ -54,8 +54,8 @@ app.listen(PORT, () => {
   console.log(`Example: Single Product by ID: http://localhost:${PORT}/api/products/YOUR_PRODUCT_MONGODB_ID`);
 });
 
-const cors = require('cors');
-
+// --- CORS Configuration ---
+// This is crucial for your frontend to communicate with the backend.
 const allowedOrigins = process.env.NODE_ENV === 'production'
     ? process.env.CORS_ORIGIN // This will be your Netlify URL
     : ['http://localhost:3000', 'http://localhost:5173']; // Add your frontend's local dev URLs
