@@ -3,6 +3,7 @@ import express from 'express';
 import User from '../models/User.js'; // Import the User model
 import jwt from 'jsonwebtoken'; // Import jsonwebtoken for token generation
 import dotenv from 'dotenv'; // Import dotenv to load environment variables
+import { protect } from '../middleware/authMiddleware.js'; // <--- ADD THIS LINE
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -74,6 +75,21 @@ router.post('/register', async (req, res) => {
     }
     res.status(500).json({ message: 'Server error during registration.' });
   }
+});
+
+// @desc    Get user profile
+// @route   GET /api/users/profile
+// @access  Private (requires authentication)
+router.get('/profile', protect, async (req, res) => {
+    // If we reach this point, the 'protect' middleware has successfully
+    // authenticated the user and attached the user object to 'req.user'.
+    res.json({
+        _id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        isAdmin: req.user.isAdmin,
+        // You can add more user-specific data here if needed
+    });
 });
 
 export default router;
