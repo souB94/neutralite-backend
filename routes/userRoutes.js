@@ -77,20 +77,8 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// @desc    Get user profile
-// @route   GET /api/users/profile
-// @access  Private (requires authentication)
-router.get('/profile', protect, async (req, res) => {
-    // If we reach this point, the 'protect' middleware has successfully
-    // authenticated the user and attached the user object to 'req.user'.
-    res.json({
-        _id: req.user._id,
-        name: req.user.name,
-        email: req.user.email,
-        isAdmin: req.user.isAdmin,
-        // You can add more user-specific data here if needed
-    });
-});
+// @desc    Authenticate user and get token
+// @route   POST /api/users/login
 
 // @desc    Update user profile
 // @route   PUT /api/users/profile
