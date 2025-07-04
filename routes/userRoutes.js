@@ -92,4 +92,54 @@ router.get('/profile', protect, async (req, res) => {
     });
 });
 
+// @desc    Update user profile
+// @route   PUT /api/users/profile
+// @access  Private (requires authentication)
+router.put('/profile', protect, async (req, res) => {
+    // 'req.user' is available here because the 'protect' middleware already ran.
+    const user = await User.findById(req.user._id); // Fetch the user from DB again (redundant but safe)
+
+    if (user) {
+        // Update name if provided in the request body, otherwise keep existing name
+        user.name = req.body.name || user.name;
+
+        // Update email if provided in the request body
+        // Add validation to ensure email is unique before saving
+        if (req.body.email && req.body.email !== user.email) {
+            const emailExists = await User.findOne({ email: req.body.email });
+            if (emailExists && emailExists._id.toString() !== user._id.toString()) {
+                return res.status(400).json({ message: 'Email already in use by another account.' });
+            }
+            user.email = req.body.email;
+        }
+
+        // --- IMPORTANT: Handle password updates separately ---
+        // We are NOT allowing password change directly via this route for simplicity and security.
+        // Password change usually involves current password confirmation and should be its own endpoint.
+        // If you uncomment and enable this, ensure password hashing is handled correctly
+        // (the .pre('save') hook in User.js will handle it for updates).
+        // if (req.body.password) {
+        //     user.password = req.body.password;
+        // }
+
+        // Save the updated user document to the database
+        const updatedUser = await user.save();
+
+        // Send back the updated user details and a new token (optional, but good for refreshing client state)
+        res.json({
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            isAdmin: updatedUser.isAdmin,
+            token: generateToken(updatedUser._id), // Generate a new token if profile fields changed,
+                                                  // or just return the old one if nothing sensitive changed.
+                                                  // Generating a new one is safer practice to reflect current state.
+        });
+    } else {
+        // This case should ideally not happen if 'protect' middleware works correctly,
+        // as 'req.user' should always correspond to an existing user.
+        res.status(404).json({ message: 'User not found.' });
+    }
+});
+
 export default router;
