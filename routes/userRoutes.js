@@ -35,7 +35,8 @@ router.post('/register', async (req, res) => {
   try {
     // 2. Check if a user with the given email already exists
     // User.findOne({ email: email }) searches the database for a user matching the email.
-    const userExists = await User.findOne({ email });
+    const emailLower = email.toLowerCase().trim(); // 🔥 Fix here
+    const userExists = await User.findOne({ email: emailLower });
 
     if (userExists) {
       // If user exists, send a 400 Bad Request response with an error message.
