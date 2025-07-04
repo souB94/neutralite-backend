@@ -77,6 +77,36 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// @desc    Authenticate user & get token (User Login)
+// @route   POST /api/users/login
+// @access  Public
+router.post('/login', async (req, res) => { // <--- THIS IS THE MISSING PART
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Please enter email and password.' });
+    }
+
+    try {
+        const user = await User.findOne({ email });
+
+        if (user && (await user.matchPassword(password))) {
+            res.status(200).json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                isAdmin: user.isAdmin,
+                token: generateToken(user._id),
+            });
+        } else {
+            res.status(401).json({ message: 'Invalid email or password.' });
+        }
+    } catch (error) {
+        console.error('Error during user login:', error);
+        res.status(500).json({ message: 'Server error during login.' });
+    }
+});
+
 // @desc    Get user profile
 // @route   GET /api/users/profile
 // @access  Private (requires authentication)
