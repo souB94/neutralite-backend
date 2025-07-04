@@ -2,6 +2,7 @@
 import express from 'express';
 import Product from '../models/Product.js'; // Import your general Product model
 import PersonalCareProduct from '../models/PersonalCareProducts.js'; // Import your Personal Care Product model
+import ShopCategoryProduct from '../models/ShopCategory.js'; // Import your Shop Category Product model
 
 const router = express.Router();
 
@@ -13,9 +14,10 @@ router.get('/', async (req, res) => {
     // This allows us to aggregate filter options across all product types
     const generalProducts = await Product.find({});
     const personalCareProducts = await PersonalCareProduct.find({});
+    const shopCategoryProducts = await ShopCategoryProduct.find({});
 
     // Combine all products into a single array for easier processing
-    const allProducts = [...generalProducts, ...personalCareProducts];
+    const allProducts = [...generalProducts, ...personalCareProducts, ...shopCategoryProducts];
 
     // --- Aggregate Data for Filters ---
     let inStockCount = 0;
