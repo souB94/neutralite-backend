@@ -36,7 +36,7 @@ const userSchema = mongoose.Schema(
 userSchema.pre('save', async function (next) {
   // 'this' refers to the user document being saved
   // Only hash the password if it's being modified (or is new)
-  if (!this.isModified('password')) {
+  if (!this.isModified('password')) {       
     next(); // If password is not modified, move to the next middleware/save operation
   }
 
@@ -44,7 +44,7 @@ userSchema.pre('save', async function (next) {
   const salt = await bcrypt.genSalt(10); // 10 is the number of rounds for hashing, a good balance
 
   // Hash the password using the generated salt
-  this.password = await bcrypt.hash(this.password, salt);
+  this.password = bcrypt.hash(this.password, salt);
   next(); // Move to the next middleware/save operation
 });
 
