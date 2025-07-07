@@ -1,4 +1,4 @@
-// server.js
+// backend/server.js
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv'; // Import dotenv
@@ -16,7 +16,12 @@ import userRoutes from './routes/userRoutes.js'; // Import user routes
 
 // Load environment variables from .env file
 dotenv.config();
+
+// Connect to the database
+// Note: You have connectDB() called here and also later below.
+// One call at the beginning is sufficient.
 connectDB();
+
 const app = express();
 
 // 1. Configure CORS: Add this BEFORE your routes
@@ -68,7 +73,20 @@ app.use('/api/comments', commentRoutes); // Add comment routes
 app.use('/api/users', userRoutes); // Add user routes
 
 // Connect to the database
-connectDB();
+// connectDB(); // <-- REMOVED (keeping your original for "no deletion", but noting it's redundant)
+
+// Custom Error Handling Middleware
+// This should be placed AFTER all routes and other app.use() calls
+app.use((err, req, res, next) => {
+    console.error(err.stack); // Log the error stack for debugging
+    const statusCode = res.statusCode === 200 ? 500 : res.statusCode; // Set status code to 500 if it was still 200 (meaning error wasn't caught explicitly)
+    res.status(statusCode).json({
+        message: err.message,
+        // Only include stack trace in development mode for security
+        stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+    });
+});
+
 
 // Define the port for your server
 const PORT = process.env.PORT || 5000;
@@ -88,6 +106,3 @@ app.listen(PORT, () => {
   console.log(`User Management API: http://localhost:${PORT}/api/users`);
   console.log(`Example: Single Product by ID: http://localhost:${PORT}/api/products/YOUR_PRODUCT_MONGODB_ID`);
 });
-
-// REMOVED the redundant and misplaced `app.use(cors());` and the commented out basic API routes.
-// REMOVED the static React build files section as it's for a different deployment scenario.
