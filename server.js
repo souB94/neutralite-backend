@@ -16,35 +16,40 @@ import userRoutes from './routes/userRoutes.js'; // Import user routes
 
 // Load environment variables from .env file
 dotenv.config();
-
+connectDB();
 const app = express();
 
-// Middleware to parse JSON request bodies
-app.use(express.json());
+// 1. Configure CORS: Add this BEFORE your routes
+// For development, you can allow all:
+// app.use(cors());
 
+// For production, specify your frontend origin:
 // --- CORS Configuration ---
 // This must come BEFORE your route definitions.
 const allowedOrigins = process.env.NODE_ENV === 'production'
-    ? process.env.CORS_ORIGIN // This will be your Netlify URL
-    : ['http://localhost:5000', 'http://localhost:5173']; // Add your frontend's local dev URLs
+    ? process.env.CORS_ORIGIN // This will be your Netlify or production frontend URL
+    : [
+        'http://localhost:3000', // Your local frontend development server
+        'http://localhost:5000', // Add your frontend's local dev URLs
+        'http://localhost:5173', // If you're using Vite's default port
+        'https://neutralite-cosmetics.netlify.app/', // **REPLACE THIS WITH YOUR ACTUAL FRONTEND URL ON RENDER**
+    ];
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps, Postman/Insomnia, curl requests)
+        // Allow requests with no origin (like mobile apps, Postman/Thunder Client, or file://)
         if (!origin) return callback(null, true);
-        // Allow specific origins
-        if (Array.isArray(allowedOrigins)) {
-            if (allowedOrigins.includes(origin)) {
-                return callback(null, true);
-            }
-        } else if (origin === allowedOrigins) {
-            return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
         }
-        // Block all other origins
-        var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-        return callback(new Error(msg), false);
-    }
+        return callback(null, true);
+    },
+    credentials: true // Set to true if you're handling cookies or authorization headers
 }));
+
+// Middleware to parse JSON request bodies
+app.use(express.json());
 
 
 // Serve static files from the 'uploads' directory

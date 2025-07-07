@@ -4,10 +4,18 @@ import User from '../models/User.js'; // Import the User model
 import jwt from 'jsonwebtoken'; // Import jsonwebtoken for token generation
 import dotenv from 'dotenv'; // Import dotenv to load environment variables
 import { protect } from '../middleware/authMiddleware.js'; // <--- ADD THIS LINE
+import { authUser, registerUser, getUserProfile } from '../controller/userController.js'; // <--- THIS PATH IS CRITICAL
 
 dotenv.config(); // Load environment variables from .env file
 
 const router = express.Router();
+
+// Public routes
+router.post('/login', authUser); // Login route
+router.route('/register').post(registerUser); // Registration route
+
+// Private routes (require authentication)
+router.route('/profile').get(protect, getUserProfile); // Get user profile
 
 // Helper function to generate a JWT (JSON Web Token)
 // This function encapsulates the logic for creating the token.
