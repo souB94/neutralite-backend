@@ -32,7 +32,7 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
         'http://localhost:3000', // Your local frontend development server
         'http://localhost:5000', // Add your frontend's local dev URLs
         'http://localhost:5173', // If you're using Vite's default port
-        'https://neutralite-cosmetics.netlify.app/', // **REPLACE THIS WITH YOUR ACTUAL FRONTEND URL ON RENDER**
+        'https://neutralite-cosmetics.netlify.app', // **REPLACE THIS WITH YOUR ACTUAL FRONTEND URL ON RENDER**
     ];
 
 app.use(cors({
