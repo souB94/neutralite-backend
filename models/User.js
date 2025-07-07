@@ -38,6 +38,7 @@ userSchema.pre('save', async function (next) {
   // Only hash the password if it's being modified (or is new)
   if (!this.isModified('password')) {       
     next(); // If password is not modified, move to the next middleware/save operation
+    return;
   }
 
   // Generate a salt (random string) to add to the password for hashing
