@@ -91,29 +91,44 @@ const getUserProfile = asyncHandler(async (req, res) => {
 
 // @desc    Update user profile
 const updateProfile = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id);
-    if (user) {
-        user.name = req.body.name || user.name;
-        if (req.body.email && req.body.email !== user.email) {
-            const emailExists = await User.findOne({ email: req.body.email });
-            if (emailExists && emailExists._id.toString() !== user._id.toString()) {
-                res.status(400);
-                throw new Error('Email already in use by another account.');
-            }
-            user.email = req.body.email;
-        }
-        const updatedUser = await user.save();
-        res.json({
-            _id: updatedUser._id,
-            name: updatedUser.name,
-            email: updatedUser.email,
-            isAdmin: updatedUser.isAdmin,
-            token: generateToken(updatedUser._id),
-        });
-    } else {
-        res.status(404);
-        throw new Error('User not found');
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+
+    if (req.body.email && req.body.email !== user.email) {
+      const emailExists = await User.findOne({ email: req.body.email });
+      if (emailExists && emailExists._id.toString() !== user._id.toString()) {
+        res.status(400);
+        throw new Error('Email already in use by another account.');
+      }
+      user.email = req.body.email;
     }
+
+    // ✅ ADD this: allow address update
+    if (req.body.address !== undefined) {
+      user.address = req.body.address;
+    }
+
+    // ✅ ADD this: allow password update
+    if (req.body.password) {
+      user.password = req.body.password; // bcrypt middleware will hash it
+    }
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      address: updatedUser.address,
+      isAdmin: updatedUser.isAdmin,
+      token: generateToken(updatedUser._id),
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
 });
 
 // @desc    Initiate password reset (send email with token)

@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      match: [/.+@.+\..+/, 'Please enter a valid email address'] // Corrected typo here
+      match: [/.+@.+\..+/, 'Please enter a valid email address']
     },
     password: {
       type: String,
@@ -25,6 +25,13 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+
+    // ✅ Add address field
+    address: {
+      type: String,
+      default: '',
+    },
+
     passwordResetToken: String,
     passwordResetExpires: Date,
   },
