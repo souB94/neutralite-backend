@@ -1,15 +1,18 @@
 // routes/orderRoutes.js
 import express from 'express';
 import Order from '../models/Order.js'; // Import the Order model
+import getMyOrders from '../controllers/orderController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 // @desc    Create a new order
 // @route   POST /api/orders
 // @access  Public (for now, would typically be private/authenticated)
-router.post('/', async (req, res) => {
+router.post('/', protect, async (req, res) => {
     try {
         const {
+            
             contactMail,
             shippingAddress,
             billingAddress,
@@ -29,6 +32,7 @@ router.post('/', async (req, res) => {
 
         // Create a new order instance
         const newOrder = new Order({
+            user: req.user._id,
             contactMail,
             shippingAddress,
             billingAddress,
@@ -58,7 +62,7 @@ router.post('/', async (req, res) => {
 
 // You can add more routes here, e.g., to fetch orders by user, get a single order, etc.
 // Example: Get all orders (for admin)
-/*
+
 router.get('/', async (req, res) => {
     try {
         const orders = await Order.find({});
@@ -68,6 +72,8 @@ router.get('/', async (req, res) => {
         res.status(500).json({ message: 'Server error while fetching orders.' });
     }
 });
-*/
+
+router.get('/myorders', protect, getMyOrders);
+
 
 export default router;
