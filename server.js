@@ -13,6 +13,7 @@ import orderRoutes from './routes/OrderRoutes.js'; // <-- NEW: Import order rout
 import blogRoutes from './routes/blogRoutes.js'; // Import blog routes
 import commentRoutes from './routes/commentRoutes.js'; // Import comment routes
 import userRoutes from './routes/userRoutes.js'; // Import user routes
+import contactRoutes from './routes/contactRoute.js'; // Import Contact Routes
 
 // Load environment variables from .env file
 dotenv.config();
@@ -71,6 +72,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/comments', commentRoutes); // Add comment routes
 app.use('/api/users', userRoutes); // Add user routes
+app.use('/api/contact', contactRoutes); // Add Contact routes
 
 // Connect to the database
 // connectDB(); // <-- REMOVED (keeping your original for "no deletion", but noting it's redundant)
