@@ -6,7 +6,7 @@ import connectDB from './config/db.js'; // Import the database connection functi
 import productRoutes from './routes/productRoutes.js'; // Import product routes
 import bannerRoutes from './routes/bannerRoutes.js'; // Import banner routes
 import personalProductRoute from './routes/PersonalCareProductRoute.js'; // Import banner routes
-import BestSellerRoutes from './routes/BestSellerRoutes.js'; // Import best seller routes
+import bestSellerRoutes from './routes/BestSellerRoutes.js'; // Import best seller routes
 import FilterRoutes from './routes/filterRoutes.js'; // Import best seller routes
 import ShopCategoryRoutes from './routes/shopCategoryRoutes.js'; // Import shop category routes
 import orderRoutes from './routes/OrderRoutes.js'; // <-- NEW: Import order routes
@@ -65,7 +65,7 @@ app.use('/uploads', express.static('uploads'));
 app.use('/api/products', productRoutes);
 app.use('/api/banners', bannerRoutes);
 app.use('/api/personalProducts', personalProductRoute);
-app.use('/api/bestSellers', BestSellerRoutes);
+app.use('/api/bestSellers', bestSellerRoutes);
 app.use('/api/filters', FilterRoutes);
 app.use('/api/shopCategories', ShopCategoryRoutes);
 app.use('/api/orders', orderRoutes);
