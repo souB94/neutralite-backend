@@ -14,6 +14,7 @@ import blogRoutes from './routes/blogRoutes.js'; // Import blog routes
 import commentRoutes from './routes/commentRoutes.js'; // Import comment routes
 import userRoutes from './routes/userRoutes.js'; // Import user routes
 import contactRoutes from './routes/contactRoute.js'; // Import Contact Routes
+import searchRoutes from './routes/searchRoutes.js';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -73,6 +74,7 @@ app.use('/api/blogs', blogRoutes);
 app.use('/api/comments', commentRoutes); // Add comment routes
 app.use('/api/users', userRoutes); // Add user routes
 app.use('/api/contact', contactRoutes); // Add Contact routes
+app.use('/api/search', searchRoutes);
 
 // Connect to the database
 // connectDB(); // <-- REMOVED (keeping your original for "no deletion", but noting it's redundant)
