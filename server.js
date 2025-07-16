@@ -42,7 +42,7 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
         'https://neutralite-cosmetics.netlify.app', // **REPLACE THIS WITH YOUR ACTUAL FRONTEND URL ON RENDER**
     ];
 
-app.use(cors({
+/*app.use(cors({
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps, Postman/Thunder Client, or file://)
         if (!origin) return callback(null, true);
@@ -53,8 +53,9 @@ app.use(cors({
         return callback(null, true);
     },
     credentials: true // Set to true if you're handling cookies or authorization headers
-}));
+}));*/
 
+app.use(cors());
 // Middleware to parse JSON request bodies
 app.use(express.json());
 
