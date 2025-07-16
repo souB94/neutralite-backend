@@ -47,7 +47,26 @@ const bestSellerSchema = new mongoose.Schema({
   stock: {
     type: Number,
     default: 0
-  }
+  },
+    // -----------------------------
+  // --- NEW FIELDS FOR REVIEWS ---
+      reviews: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Review', // Reference to the new Review model
+        },
+      ],
+      rating: {
+        type: Number,
+        required: true,
+        default: 0,
+      },
+      numReviews: {
+        type: Number,
+        required: true,
+        default: 0,
+      },
+      // -----------------------------
 }, {
   timestamps: true // Mongoose will automatically add 'createdAt' and 'updatedAt' fields
 });

@@ -39,15 +39,33 @@ const personalCareProductSchema = new mongoose.Schema({
     required: false
   },
   // 'rating' (e.g., "5"). From your previous screenshots, this was stored as a String.
-  rating: {
+  /*rating: {
     type: String, // Keeping as String to match your existing data format
     required: false
-  },
+  },*/
   // 'stock' to track available quantity (assuming this is a new field you might add or is present)
   stock: {
     type: Number,
     default: 0
-  }
+  },
+  // --- NEW FIELDS FOR REVIEWS ---
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Review', // Reference to the new Review model
+      },
+    ],
+    rating: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    numReviews: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    // -----------------------------
 }, {
   timestamps: true // Mongoose will automatically add 'createdAt' and 'updatedAt' fields
 });
